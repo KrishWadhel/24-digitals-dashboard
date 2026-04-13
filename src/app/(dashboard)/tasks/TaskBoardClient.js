@@ -40,12 +40,21 @@ export default function TaskBoardClient({ initialTasks, userRole, clients, emplo
         {showActions && (
           <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
             {isAdmin && (
-              <button 
-                onClick={() => setEditingTask(task)}
-                style={{ background: "transparent", border: "none", color: "var(--text-secondary)", cursor: "pointer" }}
-              >
-                <Pencil size={14} />
-              </button>
+              <div style={{ display: "flex", gap: "0.4rem" }}>
+                <button 
+                  onClick={() => setEditingTask(task)}
+                  style={{ background: "rgba(59, 130, 246, 0.1)", border: "none", color: "#60a5fa", cursor: "pointer", padding: "4px", borderRadius: "4px", display: "flex", alignItems: "center" }}
+                  title="Edit Task"
+                >
+                  <Pencil size={16} />
+                </button>
+                <form action={deleteTask} style={{ display: "contents" }}>
+                  <input type="hidden" name="id" value={task.id} />
+                  <button type="submit" style={{ background: "rgba(248, 113, 113, 0.1)", border: "none", color: "#f87171", cursor: "pointer", padding: "4px", borderRadius: "4px", display: "flex", alignItems: "center" }} title="Delete Task">
+                    <Trash2 size={16} />
+                  </button>
+                </form>
+              </div>
             )}
             {task.status === 'pending' && (
               <form action={completeTask}>
@@ -57,14 +66,6 @@ export default function TaskBoardClient({ initialTasks, userRole, clients, emplo
               <form action={approveTask}>
                 <input type="hidden" name="id" value={task.id} />
                 <button type="submit" className="btn-primary" style={{ padding: "0.2rem 0.6rem", fontSize: "0.75rem", backgroundColor: "#10b981" }}>Approve</button>
-              </form>
-            )}
-            {isAdmin && (
-              <form action={deleteTask}>
-                <input type="hidden" name="id" value={task.id} />
-                <button type="submit" style={{ background: "transparent", border: "none", color: "#f87171", cursor: "pointer" }}>
-                  <Trash2 size={14} />
-                </button>
               </form>
             )}
           </div>
@@ -110,7 +111,14 @@ export default function TaskBoardClient({ initialTasks, userRole, clients, emplo
             <h2 style={{ fontSize: "1.5rem", fontWeight: "bold", marginBottom: "1.5rem" }}>Edit Task</h2>
             <form onSubmit={handleEditSubmit} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
               <input type="hidden" name="id" value={editingTask.id} />
-              <input type="text" name="title" className="input-field" defaultValue={editingTask.title} required />
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
+                <label style={{ fontSize: "0.75rem", color: "var(--text-secondary)" }}>Task Type</label>
+                <select name="title" className="input-field" defaultValue={editingTask.title} required>
+                  <option value="reel">Reel</option>
+                  <option value="post">Post</option>
+                  <option value="carousel">Carousel</option>
+                </select>
+              </div>
               <textarea name="description" className="input-field" defaultValue={editingTask.description} required style={{ minHeight: "100px" }} />
               <input type="date" name="dueDate" className="input-field" defaultValue={editingTask.dueDate} required />
               <select name="clientId" className="input-field" defaultValue={editingTask.clientId}>

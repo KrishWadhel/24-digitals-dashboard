@@ -127,7 +127,11 @@ export default function CalendarClient({ initialTasks, clients = [], employees =
                 alert(res.error);
               }
             }} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-              <input type="text" name="title" className="input-field" placeholder="Post Title (e.g. reel)" required />
+              <select name="title" className="input-field" required>
+                <option value="reel">Reel</option>
+                <option value="post">Post</option>
+                <option value="carousel">Carousel</option>
+              </select>
               <input type="text" name="description" className="input-field" placeholder="Content details..." required />
               <input type="date" name="dueDate" className="input-field" required />
               <select name="clientId" className="input-field" required>

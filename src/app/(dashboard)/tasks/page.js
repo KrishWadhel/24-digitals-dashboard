@@ -41,7 +41,11 @@ export default async function TasksPage() {
           <h3 style={{ marginBottom: "1rem", fontSize: "1.2rem", fontWeight: "bold" }}>Assign New Task</h3>
           <form action={addTask} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
             <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
-              <input type="text" name="title" className="input-field" placeholder="Task Title (e.g. reel)" required style={{ flex: 1, minWidth: "200px" }} />
+              <select name="title" className="input-field" required style={{ flex: 1, minWidth: "150px" }}>
+                <option value="reel">Reel</option>
+                <option value="post">Post</option>
+                <option value="carousel">Carousel</option>
+              </select>
               <input type="text" name="description" className="input-field" placeholder="Task Description" required style={{ flex: 2, minWidth: "300px" }} />
               <input type="date" name="dueDate" className="input-field" required style={{ flex: 1, minWidth: "150px" }} />
             </div>
