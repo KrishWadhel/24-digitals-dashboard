@@ -59,6 +59,11 @@ export default function Sidebar() {
           );
         })}
       </nav>
+
+      <div style={{ marginTop: 'auto', padding: '1rem 2rem', borderTop: '1px solid var(--border-color)', opacity: 0.6 }}>
+        <p style={{ fontSize: '0.75rem', fontWeight: '500' }}>v2.0 - April 2026</p>
+        <p style={{ fontSize: '0.65rem' }}>Update Active</p>
+      </div>
     </aside>
   );
 }
