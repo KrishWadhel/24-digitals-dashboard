@@ -3,33 +3,17 @@ import fs from "fs";
 
 let db;
 
-// Check if we are running on Vercel or in a serverless environment
-const isServerless = process.env.VERCEL === '1' || process.env.NODE_ENV === 'production';
+// Check if we are running on Vercel
+const isServerless = process.env.VERCEL === '1';
 
 if (isServerless) {
-  // Mock DB for Vercel Demo Mode (to prevent 500 errors)
-  console.log("Running in Vercel Demo Mode (Mock DB)");
-  db = {
-    prepare: (query) => ({
-      all: () => {
-        if (query.includes("Client")) {
-          return [
-            { id: "1", name: "24 digitals", status: "active" },
-            { id: "2", name: "NSF Security", status: "active" },
-            { id: "3", name: "Dr. Akashi", status: "active" },
-            { id: "4", name: "A.P Associates", status: "active" },
-          ];
-        }
-        return [];
-      },
-      get: () => ({}),
-      run: () => ({}),
-      exec: () => ({}),
-    }),
-    exec: () => ({}),
-  };
+  // Cloud Mode: Use readonly to prevent Vercel 500 error on Read-Only file system
+  console.log("Running in Vercel Cloud Mode (Read-Only DB)");
+  const Database = require("better-sqlite3");
+  const dbPath = path.join(process.cwd(), "dev.db");
+  db = new Database(dbPath, { readonly: true });
 } else {
-  // Local Mode: Use better-sqlite3
+  // Local Mode: Use RW better-sqlite3
   const Database = require("better-sqlite3");
   const bcrypt = require("bcryptjs");
   
