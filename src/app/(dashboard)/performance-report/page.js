@@ -94,6 +94,7 @@ const ReportSegment = ({ client }) => {
         <thead>
           <tr style={{ backgroundColor: '#000', color: '#fff' }}>
             <th style={{ padding: '1rem', textAlign: 'left' }}>DATE</th>
+            <th style={{ padding: '1rem', textAlign: 'center' }}>PHOTO</th>
             <th style={{ padding: '1rem', textAlign: 'left' }}>TYPE</th>
             <th style={{ padding: '1rem', textAlign: 'left' }}>DESCRIPTION</th>
             <th style={{ padding: '1rem', textAlign: 'right' }}>REACH</th>
@@ -109,7 +110,16 @@ const ReportSegment = ({ client }) => {
             return (
               <tr key={idx} style={{ borderBottom: '1px solid #eee' }}>
                 <td style={{ padding: '1rem', fontWeight: 'bold' }}>{formatDate(task.dueDate)}</td>
-                <td style={{ padding: '1rem' }}><span style={{ padding: '0.25rem 0.5rem', background: '#f5f5f5', borderRadius: '4px', textTransform: 'uppercase', fontSize: '0.65rem' }}>{task.title}</span></td>
+                <td style={{ padding: '1rem', textAlign: 'center' }}>
+                  <div style={{ width: '40px', height: '40px', background: '#f5f5f5', borderRadius: '6px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                    {task.imageUrl ? (
+                      <img src={task.imageUrl} alt="post" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    ) : (
+                      <Camera size={16} color="#ccc" />
+                    )}
+                  </div>
+                </td>
+                <td style={{ padding: '1rem' }}><span style={{ padding: '0.25rem 0.5rem', background: '#f5f5f5', borderRadius: '4px', textTransform: 'uppercase', fontSize: '0.65rem', color: '#000' }}>{task.title}</span></td>
                 <td style={{ padding: '1rem' }}>{task.description}</td>
                 <td style={{ padding: '1rem', textAlign: 'right', fontWeight: '700' }}>{reach.toLocaleString()}</td>
                 <td style={{ padding: '1rem', textAlign: 'right', fontWeight: '700' }}>{interactions.toLocaleString()}</td>
@@ -170,9 +180,9 @@ export default function PerformanceReportPage() {
           .report-page { margin: 0 !important; width: 100% !important; height: auto !important; box-shadow: none !important; }
           body { background: #fff !important; }
         }
-        .sidebar { width: 300px; background: #fff; border-right: 1px solid #e2e8f0; height: 100vh; overflow-y: auto; padding: 2rem; position: sticky; top: 0; }
-        .client-btn { width: 100%; text-align: left; padding: 1rem; border-radius: 12px; margin-bottom: 0.5rem; border: 1px solid transparent; background: transparent; cursor: pointer; transition: all 0.2s; color: var(--text-primary); }
-        .client-btn:hover { background: var(--bg-hover); }
+        .sidebar { width: 300px; background: #fff; border-right: 1px solid #e2e8f0; height: 100vh; overflow-y: auto; padding: 2rem; position: sticky; top: 0; color: #000; }
+        .client-btn { width: 100%; text-align: left; padding: 1rem; border-radius: 12px; margin-bottom: 0.5rem; border: 1px solid transparent; background: transparent; cursor: pointer; transition: all 0.2s; color: #000; }
+        .client-btn:hover { background: #f1f5f9; }
         .client-btn.active { background: #a855f7; color: #fff; border-color: #a855f7; }
         .report-page * { text-shadow: none; }
         .report-page { background: #fff; width: 210mm; min-height: 297mm; margin: 0 auto; box-shadow: 0 40px 100px rgba(0,0,0,0.05); position: relative; color: #000; }
