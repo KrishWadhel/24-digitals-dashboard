@@ -8,25 +8,29 @@ export default async function TasksPage() {
   const session = await getServerSession(authOptions);
   const userRole = session?.user?.role || "employee";
   const userId = session?.user?.id;
+  const clientId = session?.user?.clientId;
 
-  const isAdmin = true; // userRole === "admin" || userRole === "senior";
+  const isAdmin = true; // Temporary global edit tools override
 
-  const tasksQuery = isAdmin 
-    ? `SELECT Task.*, Client.name as clientName, User.name as assigneeName 
+  let tasksQuery, params = [];
+  if (userRole === "client") {
+    tasksQuery = `SELECT Task.*, Client.name as clientName, User.name as assigneeName 
        FROM Task 
        LEFT JOIN Client ON Task.clientId = Client.id 
        LEFT JOIN User ON Task.assigneeId = User.id
-       ORDER BY Task.dueDate ASC`
-    : `SELECT Task.*, Client.name as clientName, User.name as assigneeName 
-       FROM Task 
-       LEFT JOIN Client ON Task.clientId = Client.id 
-       LEFT JOIN User ON Task.assigneeId = User.id
-       WHERE Task.assigneeId = ?
+       WHERE Task.clientId = ?
        ORDER BY Task.dueDate ASC`;
+    params = [clientId];
+  } else {
+    // Admin, Senior, Employee see everything globally
+    tasksQuery = `SELECT Task.*, Client.name as clientName, User.name as assigneeName 
+       FROM Task 
+       LEFT JOIN Client ON Task.clientId = Client.id 
+       LEFT JOIN User ON Task.assigneeId = User.id
+       ORDER BY Task.dueDate ASC`;
+  }
 
-  const tasks = isAdmin 
-    ? db.prepare(tasksQuery).all()
-    : db.prepare(tasksQuery).all(userId);
+  const tasks = db.prepare(tasksQuery).all(...params);
 
   const clients = db.prepare("SELECT * FROM Client").all();
   const employees = db.prepare("SELECT * FROM User").all();

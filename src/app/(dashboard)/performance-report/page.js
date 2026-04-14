@@ -108,20 +108,11 @@ const ReportSegment = ({ client }) => {
 
             return (
               <tr key={idx} style={{ borderBottom: '1px solid #eee' }}>
-                <td style={{ padding: '1rem', fontWeight: 'bold', color: '#000' }}>{formatDate(task.dueDate)}</td>
-                <td style={{ padding: '1rem', textAlign: 'center' }}>
-                  <div style={{ width: '40px', height: '40px', background: '#f5f5f5', borderRadius: '6px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-                    {task.imageUrl ? (
-                      <img src={task.imageUrl} alt="post" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    ) : (
-                      <Camera size={16} color="#ccc" />
-                    )}
-                  </div>
-                </td>
-                <td style={{ padding: '1rem' }}><span style={{ padding: '0.25rem 0.5rem', background: '#f5f5f5', color: '#000', borderRadius: '4px', textTransform: 'uppercase', fontSize: '0.65rem' }}>{task.title}</span></td>
-                <td style={{ padding: '1rem', color: '#000' }}>{task.description}</td>
-                <td style={{ padding: '1rem', textAlign: 'right', fontWeight: '700', color: '#000' }}>{reach.toLocaleString()}</td>
-                <td style={{ padding: '1rem', textAlign: 'right', fontWeight: '700', color: '#000' }}>{interactions.toLocaleString()}</td>
+                <td style={{ padding: '1rem', fontWeight: 'bold' }}>{formatDate(task.dueDate)}</td>
+                <td style={{ padding: '1rem' }}><span style={{ padding: '0.25rem 0.5rem', background: '#f5f5f5', borderRadius: '4px', textTransform: 'uppercase', fontSize: '0.65rem' }}>{task.title}</span></td>
+                <td style={{ padding: '1rem' }}>{task.description}</td>
+                <td style={{ padding: '1rem', textAlign: 'right', fontWeight: '700' }}>{reach.toLocaleString()}</td>
+                <td style={{ padding: '1rem', textAlign: 'right', fontWeight: '700' }}>{interactions.toLocaleString()}</td>
                 <td style={{ padding: '1rem', textAlign: 'center' }}>
                   <span style={{ color: task.status === 'approved' ? '#10b981' : task.status === 'completed' ? '#fbbf24' : '#ccc', fontWeight: '900' }}>
                     {task.status.toUpperCase()}
