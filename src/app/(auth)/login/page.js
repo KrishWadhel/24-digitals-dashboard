@@ -65,9 +65,14 @@ export default function LoginPage() {
             Sign In
           </button>
         </form>
-        <p style={{ marginTop: '1.5rem', textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
-          Demo: admin@24digitals.com / admin123
-        </p>
+        <div style={{ marginTop: '1.5rem', textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
+          <p style={{ marginBottom: "0.5rem" }}>Demo Accounts (Password: admin123)</p>
+          <ul style={{ listStyleType: "none", padding: 0, margin: 0 }}>
+            <li>admin@24digitals.com (Admin)</li>
+            <li>yashvi@24digitals.com (Employee)</li>
+            <li>ananya@24digitals.com (Employee)</li>
+          </ul>
+        </div>
       </div>
     </div>
   );
