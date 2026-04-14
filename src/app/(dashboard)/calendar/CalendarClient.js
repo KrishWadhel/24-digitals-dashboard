@@ -148,120 +148,198 @@ export default function CalendarClient({ initialTasks, clients = [], employees =
         </div>
       )}
 
-      <div className="panel" style={{ padding: "0", overflow: "hidden" }}>
-        {/* Calendar Header */}
-        <div style={{ 
-          display: "flex", 
-          justifyContent: "space-between", 
-          alignItems: "center", 
-          padding: "1.5rem",
-          borderBottom: "1px solid var(--border-color)"
-        }}>
-          <button onClick={prevMonth} style={{ background: "none", border: "none", color: "#fff", cursor: "pointer" }}>
-            <ChevronLeft size={24} />
-          </button>
-          <h2 style={{ fontSize: "1.5rem", fontWeight: "bold", fontFamily: "'Space Grotesk', sans-serif" }}>
-            {monthName} {year}
-          </h2>
-          <button onClick={nextMonth} style={{ background: "none", border: "none", color: "#fff", cursor: "pointer" }}>
-            <ChevronRight size={24} />
-          </button>
-        </div>
+      {view === 'grid' ? (
+        <div className="panel" style={{ padding: "0", overflow: "hidden" }}>
+          {/* Calendar Header */}
+          <div style={{ 
+            display: "flex", 
+            justifyContent: "space-between", 
+            alignItems: "center", 
+            padding: "1.5rem",
+            borderBottom: "1px solid var(--border-color)"
+          }}>
+            <button onClick={prevMonth} style={{ background: "none", border: "none", color: "#fff", cursor: "pointer" }}>
+              <ChevronLeft size={24} />
+            </button>
+            <h2 style={{ fontSize: "1.5rem", fontWeight: "bold", fontFamily: "'Space Grotesk', sans-serif" }}>
+              {monthName} {year}
+            </h2>
+            <button onClick={nextMonth} style={{ background: "none", border: "none", color: "#fff", cursor: "pointer" }}>
+              <ChevronRight size={24} />
+            </button>
+          </div>
 
-        {/* Grid Header */}
-        <div style={{ 
-          display: "grid", 
-          gridTemplateColumns: "repeat(7, 1fr)", 
-          textAlign: "center",
-          borderBottom: "1px solid var(--border-color)",
-          backgroundColor: "rgba(255,255,255,0.02)"
-        }}>
-          {['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'].map(day => (
-            <div key={day} style={{ padding: "1rem", fontSize: "0.75rem", fontWeight: "bold", color: "var(--text-secondary)" }}>
-              {day}
-            </div>
-          ))}
-        </div>
+          {/* Grid Header */}
+          <div style={{ 
+            display: "grid", 
+            gridTemplateColumns: "repeat(7, 1fr)", 
+            textAlign: "center",
+            borderBottom: "1px solid var(--border-color)",
+            backgroundColor: "rgba(255,255,255,0.02)"
+          }}>
+            {['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'].map(day => (
+              <div key={day} style={{ padding: "1rem", fontSize: "0.75rem", fontWeight: "bold", color: "var(--text-secondary)" }}>
+                {day}
+              </div>
+            ))}
+          </div>
 
-        {/* Grid Body */}
-        <div style={{ 
-          display: "grid", 
-          gridTemplateColumns: "repeat(7, 1fr)",
-          gridAutoRows: "minmax(120px, auto)"
-        }}>
-          {days.map((day, idx) => {
-            const dayTasks = getTasksForDay(day);
-            const isToday = day === new Date().getDate() && month === new Date().getMonth() && year === new Date().getFullYear();
-            
-            return (
-              <div key={idx} style={{ 
-                borderRight: (idx + 1) % 7 === 0 ? "none" : "1px solid var(--border-color)",
-                borderBottom: "1px solid var(--border-color)",
-                padding: "0.5rem",
-                minHeight: "120px",
-                position: "relative",
-                backgroundColor: day ? "transparent" : "rgba(0,0,0,0.2)"
-              }}>
-                {day && (
-                  <div style={{ 
-                    fontSize: "0.875rem", 
-                    marginBottom: "0.5rem", 
-                    color: isToday ? "#fff" : "var(--text-secondary)",
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center"
-                  }}>
-                    <span style={isToday ? {
-                      backgroundColor: "var(--accent-blue)",
-                      width: "24px",
-                      height: "24px",
+          {/* Grid Body */}
+          <div style={{ 
+            display: "grid", 
+            gridTemplateColumns: "repeat(7, 1fr)",
+            gridAutoRows: "minmax(120px, auto)"
+          }}>
+            {days.map((day, idx) => {
+              const dayTasks = getTasksForDay(day);
+              const isToday = day === new Date().getDate() && month === new Date().getMonth() && year === new Date().getFullYear();
+              
+              return (
+                <div key={idx} style={{ 
+                  borderRight: (idx + 1) % 7 === 0 ? "none" : "1px solid var(--border-color)",
+                  borderBottom: "1px solid var(--border-color)",
+                  padding: "0.5rem",
+                  minHeight: "120px",
+                  position: "relative",
+                  backgroundColor: day ? "transparent" : "rgba(0,0,0,0.2)"
+                }}>
+                  {day && (
+                    <div style={{ 
+                      fontSize: "0.875rem", 
+                      marginBottom: "0.5rem", 
+                      color: isToday ? "#fff" : "var(--text-secondary)",
                       display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      borderRadius: "50%",
-                      fontSize: "0.75rem",
-                      fontWeight: "bold"
-                    } : {}}>{day}</span>
-                  </div>
-                )}
-                <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                  {dayTasks.map(task => (
-                    <div 
-                      key={task.id} 
-                      style={{ 
-                        fontSize: "0.7rem", 
-                        padding: "4px 8px", 
-                        borderRadius: "4px",
-                        backgroundColor: "rgba(255,255,255,0.05)",
-                        borderLeft: `3px solid ${getTaskColor(task.title)}`,
+                      justifyContent: "space-between",
+                      alignItems: "center"
+                    }}>
+                      <span style={isToday ? {
+                        backgroundColor: "var(--accent-blue)",
+                        width: "24px",
+                        height: "24px",
                         display: "flex",
                         alignItems: "center",
-                        gap: "4px",
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        cursor: "pointer"
-                      }}
-                      title={`${task.title} - ${task.clientName}`}
-                    >
-                      <span style={{ color: getTaskColor(task.title) }}>
-                        {getTaskIcon(task.title)}
-                      </span>
-                      <span style={{ fontWeight: "500" }}>{task.title}</span>
-                      <span style={{ opacity: 0.5, fontSize: "0.6rem" }}>• {task.clientName}</span>
-                    </div>
-                  ))}
-                  {dayTasks.length > 4 && (
-                    <div style={{ fontSize: "0.65rem", color: "var(--accent-blue)", padding: "2px 8px" }}>
-                      +{dayTasks.length - 4} more
+                        justifyContent: "center",
+                        borderRadius: "50%",
+                        fontSize: "0.75rem",
+                        fontWeight: "bold"
+                      } : {}}>{day}</span>
                     </div>
                   )}
+                  <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                    {dayTasks.map(task => (
+                      <div 
+                        key={task.id} 
+                        style={{ 
+                          fontSize: "0.7rem", 
+                          padding: "4px 8px", 
+                          borderRadius: "4px",
+                          backgroundColor: "rgba(255,255,255,0.05)",
+                          borderLeft: `3px solid ${getTaskColor(task.title)}`,
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "4px",
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          cursor: "pointer"
+                        }}
+                        title={`${task.title} - ${task.clientName}`}
+                      >
+                        <span style={{ color: getTaskColor(task.title) }}>
+                          {getTaskIcon(task.title)}
+                        </span>
+                        <span style={{ fontWeight: "500" }}>{task.title}</span>
+                        <span style={{ opacity: 0.5, fontSize: "0.6rem" }}>• {task.clientName}</span>
+                      </div>
+                    ))}
+                    {dayTasks.length > 4 && (
+                      <div style={{ fontSize: "0.65rem", color: "var(--accent-blue)", padding: "2px 8px" }}>
+                        +{dayTasks.length - 4} more
+                      </div>
+                    )}
+                  </div>
                 </div>
+              );
+            })}
+          </div>
+        </div>
+      ) : (
+        <div className="panel" style={{ padding: "2rem" }}>
+          <div style={{ marginBottom: "2rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <h2 style={{ fontSize: "1.5rem", fontWeight: "bold" }}>Agenda View (Day-Wise)</h2>
+            <p style={{ color: "var(--text-secondary)", fontSize: "0.875rem" }}>Upcoming scheduled content</p>
+          </div>
+          {(() => {
+            const sortedTasks = [...tasks].sort((a,b) => new Date(a.dueDate) - new Date(b.dueDate));
+            const grouped = {};
+            sortedTasks.forEach(t => {
+              const d = t.dueDate.split('T')[0];
+              if(!grouped[d]) grouped[d] = [];
+              grouped[d].push(t);
+            });
+            
+            if (Object.keys(grouped).length === 0) {
+              return <div style={{ padding: "3rem", textAlign: "center", color: "var(--text-secondary)" }}>No tasks scheduled.</div>;
+            }
+            
+            return (
+              <div style={{ display: "flex", flexDirection: "column", gap: "2.5rem" }}>
+                {Object.keys(grouped).map(date => {
+                  const displayDate = new Date(date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+                  return (
+                    <div key={date}>
+                      <h3 style={{ 
+                        fontSize: "1.1rem", 
+                        fontWeight: "bold", 
+                        marginBottom: "1rem", 
+                        color: "var(--text-primary)", 
+                        borderBottom: "1px solid var(--border-color)", 
+                        paddingBottom: "0.5rem" 
+                      }}>
+                        {displayDate}
+                      </h3>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+                        {grouped[date].map(task => (
+                          <div key={task.id} style={{ 
+                            display: "flex", alignItems: "center", gap: "1rem", padding: "1.25rem", 
+                            backgroundColor: "var(--bg-secondary)", borderRadius: "12px", border: "1px solid var(--border-color)",
+                            transition: "transform 0.2s", cursor: "pointer"
+                          }}>
+                            <div style={{ 
+                              width: "48px", height: "48px", borderRadius: "12px", 
+                              backgroundColor: `${getTaskColor(task.title)}20`, 
+                              color: getTaskColor(task.title),
+                              display: "flex", alignItems: "center", justifyContent: "center" 
+                            }}>
+                              {getTaskIcon(task.title)}
+                            </div>
+                            <div style={{ flex: 1 }}>
+                              <div style={{ fontWeight: "bold", fontSize: "1.1rem", color: "#fff" }}>{task.description || task.title}</div>
+                              <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginTop: "6px", display: "flex", gap: "1rem" }}>
+                                <span>Type: <span style={{ textTransform: "capitalize", color: getTaskColor(task.title) }}>{task.title}</span></span>
+                                <span>Client: <span style={{ color: "#fff" }}>{task.clientName}</span></span>
+                              </div>
+                            </div>
+                            <div>
+                              <span style={{ 
+                                padding: "6px 12px", borderRadius: "20px", fontSize: "0.75rem", fontWeight: "bold", textTransform: "uppercase",
+                                backgroundColor: task.status === 'completed' ? '#10b98120' : task.status === 'approved' ? '#3b82f620' : '#fbbf2420',
+                                color: task.status === 'completed' ? '#10b981' : task.status === 'approved' ? '#3b82f6' : '#fbbf24'
+                              }}>
+                                {task.status}
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )
+                })}
               </div>
             );
-          })}
+          })()}
         </div>
-      </div>
+      )}
     </div>
   );
 }
