@@ -70,7 +70,7 @@ export default function LoginPage() {
           <ul style={{ listStyleType: "none", padding: 0, margin: 0 }}>
             <li>admin@24digitals.com (Admin)</li>
             <li>yashvi@24digitals.com (Employee)</li>
-            <li>ananya@24digitals.com (Employee)</li>
+            <li>vigo@client.com (PW: client123)</li>
           </ul>
         </div>
       </div>

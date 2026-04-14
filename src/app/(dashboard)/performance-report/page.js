@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { Download, Camera, TrendingUp, Users, Share2, CheckCircle, Target, ArrowRight, Smartphone, BarChart2 } from "lucide-react";
 import { formatDate } from "@/lib/format";
@@ -136,6 +137,7 @@ const ReportSegment = ({ client }) => {
 };
 
 export default function PerformanceReportPage() {
+  const { data: session } = useSession();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedClientId, setSelectedClientId] = useState(null);
@@ -145,11 +147,15 @@ export default function PerformanceReportPage() {
       .then(res => res.json())
       .then(d => {
         setData(d);
-        if (d.length > 0) setSelectedClientId(d[0].id);
+        if (session?.user?.role === 'client' && session?.user?.clientId) {
+          setSelectedClientId(session.user.clientId);
+        } else if (d.length > 0) {
+          setSelectedClientId(d[0].id);
+        }
       })
       .catch(err => console.error(err))
       .finally(() => setLoading(false));
-  }, []);
+  }, [session]);
 
   const selectedClient = data.find(c => c.id === selectedClientId);
 
@@ -173,33 +179,37 @@ export default function PerformanceReportPage() {
       `}</style>
 
       {/* Sidebar - No Print */}
-      <div className="sidebar no-print">
-         <h2 style={{ fontSize: '1.25rem', fontWeight: '900', marginBottom: '2rem' }}>Clients </h2>
-         <div style={{ display: 'flex', flexDirection: 'column' }}>
-            {data.map(client => (
-              <button 
-                key={client.id} 
-                className={`client-btn ${selectedClientId === client.id ? 'active' : ''}`}
-                onClick={() => setSelectedClientId(client.id)}
-              >
-                <div style={{ fontWeight: 'bold' }}>{client.name}</div>
-                <div style={{ fontSize: '0.7rem', opacity: 0.8 }}>ID: {client.id}</div>
-              </button>
-            ))}
-         </div>
-      </div>
+      {session?.user?.role !== 'client' && (
+        <div className="sidebar no-print">
+           <h2 style={{ fontSize: '1.25rem', fontWeight: '900', marginBottom: '2rem' }}>Clients </h2>
+           <div style={{ display: 'flex', flexDirection: 'column' }}>
+              {data.map(client => (
+                <button 
+                  key={client.id} 
+                  className={`client-btn ${selectedClientId === client.id ? 'active' : ''}`}
+                  onClick={() => setSelectedClientId(client.id)}
+                >
+                  <div style={{ fontWeight: 'bold' }}>{client.name}</div>
+                  <div style={{ fontSize: '0.7rem', opacity: 0.8 }}>ID: {client.id}</div>
+                </button>
+              ))}
+           </div>
+        </div>
+      )}
 
       {/* Main Content */}
       <div style={{ flex: 1, padding: '3rem' }} className="report-container">
          <div className="no-print" style={{ maxWidth: '210mm', margin: '0 auto 2rem auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div>
-               <h1 style={{ fontSize: '1.5rem', fontWeight: '900', color: '#1a1a1a' }}>Individual Client Audit</h1>
-               <p style={{ color: '#2d3748', fontSize: '0.875rem', fontWeight: '500' }}>Select a client to generate a branded PDF report</p>
+               <h1 style={{ fontSize: '1.5rem', fontWeight: '900', color: '#1a1a1a' }}>{session?.user?.role === 'client' ? 'Your Performance Audit' : 'Individual Client Audit'}</h1>
+               <p style={{ color: '#2d3748', fontSize: '0.875rem', fontWeight: '500' }}>{session?.user?.role === 'client' ? 'Live branded progress tracking' : 'Select a client to generate a branded PDF report'}</p>
             </div>
             <div style={{ display: 'flex', gap: '0.8rem' }}>
-              <a href="/api/export/work-report" className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '1rem 2rem', textDecoration: 'none', backgroundColor: '#3b82f6', color: '#fff' }}>
-                 <BarChart2 size={20} /> Master Excel Report
-              </a>
+              {session?.user?.role !== 'client' && (
+                <a href="/api/export/work-report" className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '1rem 2rem', textDecoration: 'none', backgroundColor: '#3b82f6', color: '#fff' }}>
+                   <BarChart2 size={20} /> Master Excel Report
+                </a>
+              )}
               <button onClick={() => window.print()} className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '1rem 2rem' }}>
                  <Download size={20} /> Export Client PDF
               </button>
