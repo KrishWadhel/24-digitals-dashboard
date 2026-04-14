@@ -11,9 +11,11 @@ export async function GET() {
     const performanceData = clients.map(client => {
       // Get completed tasks for this client
       const tasks = db.prepare(`
-        SELECT * FROM Task 
-        WHERE clientId = ? 
-        ORDER BY dueDate DESC
+        SELECT Task.*, User.name as assigneeName
+        FROM Task 
+        LEFT JOIN User ON Task.assigneeId = User.id
+        WHERE Task.clientId = ? 
+        ORDER BY Task.dueDate DESC
       `).all(client.id);
 
       const actualPosts = tasks.filter(t => (t.status === 'completed' || t.status === 'approved') && t.title?.toLowerCase().includes('post')).length;

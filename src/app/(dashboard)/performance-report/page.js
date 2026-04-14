@@ -48,55 +48,15 @@ const ReportSegment = ({ client }) => {
         </div>
       </div>
 
-      {/* Summary Scorecard */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '2rem', marginBottom: '3rem' }}>
-        <div style={{ padding: '2rem', background: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '32px', display: 'flex', alignItems: 'center', gap: '2rem' }}>
-          <div style={{ width: '120px', minWidth: '120px', height: '120px', borderRadius: '50%', border: '8px solid #a855f7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <h2 style={{ fontSize: '2rem', fontWeight: '900', margin: 0, color: '#000' }}>{progress}%</h2>
-          </div>
-          <div>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: '800', marginBottom: '0.5rem', color: '#000' }}>Monthly Completion</h3>
-            <p style={{ color: '#666', fontSize: '0.875rem' }}>Current progress across all scheduled platforms and content types.</p>
-          </div>
-        </div>
-        <div style={{ padding: '2rem', background: '#000', borderRadius: '32px', color: '#fff' }}>
-          <p style={{ fontSize: '0.75rem', fontWeight: '800', opacity: 0.6, textTransform: 'uppercase', marginBottom: '1rem' }}>Snapshot</p>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-            <span>Target Items</span>
-            <span style={{ fontWeight: '900' }}>{totalTarget}</span>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <span>Actual Done</span>
-            <span style={{ fontWeight: '900', color: '#4ade80' }}>{totalActual}</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Target breakdown */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem', marginBottom: '4rem' }}>
-        <div style={{ padding: '1.5rem', border: '1px solid #e5e7eb', borderRadius: '24px', textAlign: 'center', background: '#ffffff' }}>
-          <DonutChart value={client.actual.posts} label="POSTS" total={client.targets.posts || 1} />
-          <p style={{ marginTop: '1rem', fontSize: '0.75rem', color: '#888', fontWeight: '800' }}>{client.actual.posts} / {client.targets.posts}</p>
-        </div>
-        <div style={{ padding: '1.5rem', border: '1px solid #e5e7eb', borderRadius: '24px', textAlign: 'center', background: '#ffffff' }}>
-          <DonutChart value={client.actual.reels} label="REELS" total={client.targets.reels || 1} />
-          <p style={{ marginTop: '1rem', fontSize: '0.75rem', color: '#888', fontWeight: '800' }}>{client.actual.reels} / {client.targets.reels}</p>
-        </div>
-        <div style={{ padding: '1.5rem', border: '1px solid #e5e7eb', borderRadius: '24px', textAlign: 'center', background: '#ffffff' }}>
-          <DonutChart value={client.actual.carousels} label="CAROUSELS" total={client.targets.carousels || 1} />
-          <p style={{ marginTop: '1rem', fontSize: '0.75rem', color: '#888', fontWeight: '800' }}>{client.actual.carousels} / {client.targets.carousels}</p>
-        </div>
-      </div>
-
-      {/* Detailed Post Performance - Matching PDF */}
-      <h3 style={{ fontSize: '1.25rem', fontWeight: '900', marginBottom: '1.5rem', color: '#000' }}>Detailed Post Performance</h3>
+      {/* Detailed Post Log */}
+      <h3 style={{ fontSize: '1.25rem', fontWeight: '900', marginBottom: '1.5rem', color: '#000' }}>Detailed Post Report</h3>
       <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.8rem' }}>
         <thead>
           <tr style={{ backgroundColor: '#000', color: '#fff' }}>
             <th style={{ padding: '1rem', textAlign: 'left' }}>DATE</th>
-            <th style={{ padding: '1rem', textAlign: 'center' }}>PHOTO</th>
             <th style={{ padding: '1rem', textAlign: 'left' }}>TYPE</th>
             <th style={{ padding: '1rem', textAlign: 'left' }}>DESCRIPTION</th>
+            <th style={{ padding: '1rem', textAlign: 'left' }}>ASSIGNEE</th>
             <th style={{ padding: '1rem', textAlign: 'right' }}>REACH</th>
             <th style={{ padding: '1rem', textAlign: 'right' }}>INTERACTIONS</th>
             <th style={{ padding: '1rem', textAlign: 'center' }}>STATUS</th>
@@ -110,17 +70,9 @@ const ReportSegment = ({ client }) => {
             return (
               <tr key={idx} style={{ borderBottom: '1px solid #eee' }}>
                 <td style={{ padding: '1rem', fontWeight: 'bold' }}>{formatDate(task.dueDate)}</td>
-                <td style={{ padding: '1rem', textAlign: 'center' }}>
-                  <div style={{ width: '40px', height: '40px', background: '#f5f5f5', borderRadius: '6px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-                    {task.imageUrl ? (
-                      <img src={task.imageUrl} alt="post" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    ) : (
-                      <Camera size={16} color="#ccc" />
-                    )}
-                  </div>
-                </td>
-                <td style={{ padding: '1rem' }}><span style={{ padding: '0.25rem 0.5rem', background: '#f5f5f5', borderRadius: '4px', textTransform: 'uppercase', fontSize: '0.65rem', color: '#000' }}>{task.title}</span></td>
+                <td style={{ padding: '1rem' }}><span style={{ padding: '0.25rem 0.5rem', background: '#f5f5f5', borderRadius: '4px', textTransform: 'uppercase', fontSize: '0.65rem', color: '#000', fontWeight: 'bold' }}>{task.title}</span></td>
                 <td style={{ padding: '1rem' }}>{task.description}</td>
+                <td style={{ padding: '1rem', color: '#666', fontWeight: 'bold' }}>@{task.assigneeName || 'unassigned'}</td>
                 <td style={{ padding: '1rem', textAlign: 'right', fontWeight: '700' }}>{reach.toLocaleString()}</td>
                 <td style={{ padding: '1rem', textAlign: 'right', fontWeight: '700' }}>{interactions.toLocaleString()}</td>
                 <td style={{ padding: '1rem', textAlign: 'center' }}>
@@ -132,7 +84,7 @@ const ReportSegment = ({ client }) => {
             )
           })}
           {client.tasks.length === 0 && (
-            <tr><td colSpan="6" style={{ padding: '3rem', textAlign: 'center', color: '#aaa' }}>No post records found for this period.</td></tr>
+            <tr><td colSpan="7" style={{ padding: '3rem', textAlign: 'center', color: '#aaa' }}>No post records found for this period.</td></tr>
           )}
         </tbody>
       </table>
