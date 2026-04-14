@@ -13,14 +13,14 @@ const DonutChart = ({ value, label, total = 100 }) => {
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie data={chartData} innerRadius={35} outerRadius={45} paddingAngle={0} dataKey="value" startAngle={90} endAngle={450}>
-            <Cell fill="#bc1888" stroke="none" />
+            <Cell fill="#a855f7" stroke="none" />
             <Cell fill="rgba(0,0,0,0.05)" stroke="none" />
           </Pie>
         </PieChart>
       </ResponsiveContainer>
       <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
-        <p style={{ fontSize: '1rem', fontWeight: '900', margin: 0 }}>{value}</p>
-        <p style={{ fontSize: '0.4rem', color: '#888', textTransform: 'uppercase', margin: 0, fontWeight: '700' }}>{label}</p>
+        <p style={{ fontSize: '1rem', fontWeight: '900', margin: 0, color: '#000000' }}>{value}</p>
+        <p style={{ fontSize: '0.4rem', color: '#666666', textTransform: 'uppercase', margin: 0, fontWeight: '700' }}>{label}</p>
       </div>
     </div>
   );
@@ -32,12 +32,12 @@ const ReportSegment = ({ client }) => {
   const progress = totalTarget === 0 ? 0 : Math.round((totalActual / totalTarget) * 100);
 
   return (
-    <div className="report-page" style={{ padding: '3rem' }}>
+    <div className="report-page" style={{ padding: '3rem', background: '#ffffff', color: '#000000' }}>
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '3rem', borderBottom: '2px solid #000', paddingBottom: '2rem' }}>
         <div>
-          <h1 style={{ fontSize: '2.5rem', fontWeight: '900', margin: 0, letterSpacing: '-1px' }}>Performance Audit</h1>
-          <p style={{ fontSize: '1rem', color: '#bc1888', fontWeight: '800', textTransform: 'uppercase', marginTop: '0.5rem' }}>{client.name} • April 2026</p>
+          <h1 style={{ fontSize: '2.5rem', fontWeight: '900', margin: 0, letterSpacing: '-1px', color: '#000' }}>Performance Audit</h1>
+          <p style={{ fontSize: '1rem', color: '#a855f7', fontWeight: '800', textTransform: 'uppercase', marginTop: '0.5rem' }}>{client.name} • April 2026</p>
         </div>
         <div style={{ textAlign: 'right' }}>
            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#888', fontSize: '0.75rem', fontWeight: 'Bold', marginBottom: '0.5rem' }}>
@@ -49,12 +49,12 @@ const ReportSegment = ({ client }) => {
 
       {/* Summary Scorecard */}
       <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '2rem', marginBottom: '3rem' }}>
-        <div style={{ padding: '2rem', background: '#fafafa', borderRadius: '32px', display: 'flex', alignItems: 'center', gap: '2rem' }}>
-           <div style={{ width: '120px', height: '120px', borderRadius: '50%', border: '8px solid #bc1888', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <h2 style={{ fontSize: '2rem', fontWeight: '900', margin: 0 }}>{progress}%</h2>
+        <div style={{ padding: '2rem', background: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '32px', display: 'flex', alignItems: 'center', gap: '2rem' }}>
+           <div style={{ width: '120px', minWidth: '120px', height: '120px', borderRadius: '50%', border: '8px solid #a855f7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <h2 style={{ fontSize: '2rem', fontWeight: '900', margin: 0, color: '#000' }}>{progress}%</h2>
            </div>
            <div>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: '800', marginBottom: '0.5rem' }}>Monthly Completion</h3>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: '800', marginBottom: '0.5rem', color: '#000' }}>Monthly Completion</h3>
               <p style={{ color: '#666', fontSize: '0.875rem' }}>Current progress across all scheduled platforms and content types.</p>
            </div>
         </div>
@@ -73,22 +73,22 @@ const ReportSegment = ({ client }) => {
 
       {/* Target breakdown */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem', marginBottom: '4rem' }}>
-         <div style={{ padding: '1.5rem', border: '1px solid #eee', borderRadius: '24px', textAlign: 'center' }}>
+         <div style={{ padding: '1.5rem', border: '1px solid #e5e7eb', borderRadius: '24px', textAlign: 'center', background: '#ffffff' }}>
             <DonutChart value={client.actual.posts} label="POSTS" total={client.targets.posts || 1} />
             <p style={{ marginTop: '1rem', fontSize: '0.75rem', color: '#888', fontWeight: '800' }}>{client.actual.posts} / {client.targets.posts}</p>
          </div>
-         <div style={{ padding: '1.5rem', border: '1px solid #eee', borderRadius: '24px', textAlign: 'center' }}>
+         <div style={{ padding: '1.5rem', border: '1px solid #e5e7eb', borderRadius: '24px', textAlign: 'center', background: '#ffffff' }}>
             <DonutChart value={client.actual.reels} label="REELS" total={client.targets.reels || 1} />
             <p style={{ marginTop: '1rem', fontSize: '0.75rem', color: '#888', fontWeight: '800' }}>{client.actual.reels} / {client.targets.reels}</p>
          </div>
-         <div style={{ padding: '1.5rem', border: '1px solid #eee', borderRadius: '24px', textAlign: 'center' }}>
+         <div style={{ padding: '1.5rem', border: '1px solid #e5e7eb', borderRadius: '24px', textAlign: 'center', background: '#ffffff' }}>
             <DonutChart value={client.actual.carousels} label="CAROUSELS" total={client.targets.carousels || 1} />
             <p style={{ marginTop: '1rem', fontSize: '0.75rem', color: '#888', fontWeight: '800' }}>{client.actual.carousels} / {client.targets.carousels}</p>
          </div>
       </div>
 
       {/* Detailed Post Performance - Matching PDF */}
-      <h3 style={{ fontSize: '1.25rem', fontWeight: '900', marginBottom: '1.5rem' }}>Detailed Post Performance</h3>
+      <h3 style={{ fontSize: '1.25rem', fontWeight: '900', marginBottom: '1.5rem', color: '#000' }}>Detailed Post Performance</h3>
       <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.8rem' }}>
         <thead>
           <tr style={{ backgroundColor: '#000', color: '#fff' }}>
@@ -165,10 +165,11 @@ export default function PerformanceReportPage() {
           body { background: #fff !important; }
         }
         .sidebar { width: 300px; background: #fff; border-right: 1px solid #e2e8f0; height: 100vh; overflow-y: auto; padding: 2rem; position: sticky; top: 0; }
-        .client-btn { width: 100%; text-align: left; padding: 1rem; border-radius: 12px; margin-bottom: 0.5rem; border: 1px solid transparent; background: transparent; cursor: pointer; transition: all 0.2s; }
-        .client-btn:hover { background: #f8fafc; }
-        .client-btn.active { background: #bc1888; color: #fff; border-color: #bc1888; }
-        .report-page { background: #fff; width: 210mm; min-height: 297mm; margin: 0 auto; box-shadow: 0 40px 100px rgba(0,0,0,0.05); position: relative; }
+        .client-btn { width: 100%; text-align: left; padding: 1rem; border-radius: 12px; margin-bottom: 0.5rem; border: 1px solid transparent; background: transparent; cursor: pointer; transition: all 0.2s; color: var(--text-primary); }
+        .client-btn:hover { background: var(--bg-hover); }
+        .client-btn.active { background: #a855f7; color: #fff; border-color: #a855f7; }
+        .report-page * { text-shadow: none; }
+        .report-page { background: #fff; width: 210mm; min-height: 297mm; margin: 0 auto; box-shadow: 0 40px 100px rgba(0,0,0,0.05); position: relative; color: #000; }
       `}</style>
 
       {/* Sidebar - No Print */}
