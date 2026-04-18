@@ -145,6 +145,33 @@ if (isServerless) {
         "1", "Admin Senior", "admin@24digitals.com", hash, "senior"
       );
     }
+
+    // Seed Employee: Yashvi
+    const yashviExists = connection.prepare("SELECT * FROM User WHERE email = ?").get("yashvi@24digitals.com");
+    if (!yashviExists) {
+      const hash = bcrypt.hashSync("Yashvi@1234", 10);
+      connection.prepare("INSERT INTO User (id, name, email, password, role) VALUES (?, ?, ?, ?, ?)").run(
+        "2", "Yashvi", "yashvi@24digitals.com", hash, "employee"
+      );
+    } else {
+      // Update password in case it changed
+      const hash = bcrypt.hashSync("Yashvi@1234", 10);
+      connection.prepare("UPDATE User SET password = ? WHERE email = ?").run(hash, "yashvi@24digitals.com");
+    }
+
+    // Seed Employee: Ananya
+    const ananyaExists = connection.prepare("SELECT * FROM User WHERE email = ?").get("ananya@24digitals.com");
+    if (!ananyaExists) {
+      const hash = bcrypt.hashSync("Ananya@1234", 10);
+      connection.prepare("INSERT INTO User (id, name, email, password, role) VALUES (?, ?, ?, ?, ?)").run(
+        "3", "Ananya", "ananya@24digitals.com", hash, "employee"
+      );
+    } else {
+      // Update password in case it changed
+      const hash = bcrypt.hashSync("Ananya@1234", 10);
+      connection.prepare("UPDATE User SET password = ? WHERE email = ?").run(hash, "ananya@24digitals.com");
+    }
+
     globalThis.__db = connection;
   }
   db = globalThis.__db;

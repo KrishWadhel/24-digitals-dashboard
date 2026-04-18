@@ -30,8 +30,8 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# env files
+.env*.local
 
 # vercel
 .vercel
@@ -42,13 +42,8 @@ next-env.d.ts
 
 /src/generated/prisma
 
-.vercel
-.env*.local
-
 # Local binaries and DB
 node.exe
-dev.db*
 node-bin/
 git-bin/
 scratch/
-*.txt
