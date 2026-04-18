@@ -4,7 +4,7 @@ import db from "@/lib/db";
 import { revalidatePath } from "next/cache";
 
 export async function getEmployees() {
-  return db.prepare("SELECT * FROM User ORDER BY createdAt DESC").all();
+  return db.prepare("SELECT * FROM User WHERE role != 'client' ORDER BY createdAt DESC").all();
 }
 
 export async function addEmployee(formData) {

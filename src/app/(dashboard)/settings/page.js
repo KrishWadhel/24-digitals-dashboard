@@ -6,40 +6,10 @@ import { saveSettings, getSettings } from "./actions";
 
 export default function SettingsPage() {
   const [theme, setTheme] = useState("dark"); // Default dark
-  const [apiKeys, setApiKeys] = useState({ facebook: "", instagram: "", igBusinessId: "" });
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    async function load() {
-      const data = await getSettings();
-      setApiKeys({
-        facebook: data.facebookSecret || "",
-        instagram: data.instagramToken || "",
-        igBusinessId: data.igBusinessId || ""
-      });
-    }
-    load();
-  }, []);
-  
   const handleDownloadReport = () => {
     window.location.href = "/api/worklogs";
-  };
-
-  const handleSaveKeys = async () => {
-    setLoading(true);
-    const formData = new FormData();
-    formData.append("facebookSecret", apiKeys.facebook);
-    formData.append("instagramToken", apiKeys.instagram);
-    formData.append("igBusinessId", apiKeys.igBusinessId);
-    
-    const res = await saveSettings(formData);
-    setLoading(false);
-    
-    if (res.success) {
-      alert("API Keys saved securely to database!");
-    } else {
-      alert("Error: " + res.error);
-    }
   };
 
   return (

@@ -1,12 +1,26 @@
+import db from "@/lib/db";
+import { formatDate } from "@/lib/format";
+
 export async function GET(request) {
-  // Matches "Social Media Performance Report"
+  const clientId = "yqe50g3cv"; // Ezyest App
+  const tasks = db.prepare(`
+    SELECT * FROM Task 
+    WHERE clientId = ? 
+    AND (dueDate BETWEEN '2026-04-01' AND '2026-04-30')
+    ORDER BY dueDate DESC
+  `).all(clientId);
+
   const csvHeaders = "Date,Type,Description,Reach,Interactions,Status\n";
-  const rows = [
-    "05-04-2026,Reel,100 problems 1 solution,1205,45,Done",
-    "08-04-2026,Post,myth vs facts,890,22,Done",
-    "10-04-2026,Post,most broker lose deal here,3400,156,Done",
-    "14-04-2026,Reel,ek flat chahiye rent pe,5600,310,Done"
-  ].join("\n");
+  
+  const rows = tasks.map(task => {
+    const date = formatDate(task.dueDate);
+    const type = task.title || "Post";
+    const desc = (task.description || "").replace(/,/g, ";").replace(/\n/g, " ");
+    const reach = task.reach || 0;
+    const interactions = task.interactions || 0;
+    const status = task.statusInstagram || "Done";
+    return `${date},${type},${desc},${reach},${interactions},${status}`;
+  }).join("\n");
 
   const csv = csvHeaders + rows;
 

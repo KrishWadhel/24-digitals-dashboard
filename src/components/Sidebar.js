@@ -2,21 +2,28 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Users, Calendar, UserCircle, CheckSquare, Settings, BarChart2, FileText } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { LayoutDashboard, Users, Calendar, UserCircle, CheckSquare, Settings, BarChart2, FileText, Save } from "lucide-react";
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const { data: session } = useSession();
+  const role = session?.user?.role;
 
   const navItems = [
     { name: "Dashboard", href: "/", icon: LayoutDashboard },
     { name: "Clients", href: "/clients", icon: Users },
     { name: "Analytics", href: "/analytics", icon: BarChart2 },
     { name: "Perf. Report", href: "/performance-report", icon: FileText },
+    { name: "Work Audit", href: "/work-report", icon: Save },
     { name: "Calendar", href: "/calendar", icon: Calendar },
-    { name: "Employees", href: "/employees", icon: UserCircle },
     { name: "Task Board", href: "/tasks", icon: CheckSquare },
-    { name: "Settings", href: "/settings", icon: Settings },
   ];
+
+  if (role === "admin" || role === "senior") {
+    navItems.push({ name: "Employees", href: "/employees", icon: UserCircle });
+    navItems.push({ name: "Settings", href: "/settings", icon: Settings });
+  }
 
   return (
     <aside style={{

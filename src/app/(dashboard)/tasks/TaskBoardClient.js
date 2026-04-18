@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Clock, CheckCircle, ShieldCheck, Trash2, Pencil, X } from "lucide-react";
+import { Clock, CheckCircle, ShieldCheck, Trash2, Pencil, X, Camera } from "lucide-react";
 import { completeTask, deleteTask, approveTask, updateTask } from "./actions";
 import { formatDate } from "@/lib/format";
 
@@ -9,9 +9,11 @@ export default function TaskBoardClient({ initialTasks, userRole, clients, emplo
   const [editingTask, setEditingTask] = useState(null);
   const isAdmin = true; // userRole === "admin" || userRole === "senior";
 
-  const pendingTasks = initialTasks.filter(t => t.status === 'pending');
-  const completedTasks = initialTasks.filter(t => t.status === 'completed');
-  const approvedTasks = initialTasks.filter(t => t.status === 'approved');
+  const pendingTasks = initialTasks.filter(t => t.status === 'Pending');
+  const designingTasks = initialTasks.filter(t => t.status === 'Designing');
+  const waitingTasks = initialTasks.filter(t => t.status === 'Waiting Approval');
+  const readyTasks = initialTasks.filter(t => t.status === 'Ready to Post');
+  const postedTasks = initialTasks.filter(t => t.status === 'Posted');
 
   const handleEditSubmit = async (e) => {
     e.preventDefault();
@@ -31,7 +33,7 @@ export default function TaskBoardClient({ initialTasks, userRole, clients, emplo
         <span style={{ fontSize: "0.8rem", color: borderColor, fontWeight: "600", textTransform: "uppercase" }}>{task.clientName}</span>
         <span style={{ fontSize: "0.8rem", color: "var(--text-secondary)" }}>{formatDate(task.dueDate)}</span>
       </div>
-      <h3 style={{ fontSize: "1rem", fontWeight: "600", marginBottom: "0.5rem", textDecoration: task.status === 'approved' ? "line-through" : "none" }}>{task.title}</h3>
+      <h3 style={{ fontSize: "1rem", fontWeight: "600", marginBottom: "0.5rem", textDecoration: task.status === 'Posted' ? "line-through" : "none" }}>{task.title}</h3>
       <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginBottom: "1rem" }}>{task.description}</p>
       
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -56,16 +58,32 @@ export default function TaskBoardClient({ initialTasks, userRole, clients, emplo
                 </form>
               </div>
             )}
-            {task.status === 'pending' && (
-              <form action={completeTask}>
+            {task.status === 'Pending' && (
+              <form action={updateTask}>
                 <input type="hidden" name="id" value={task.id} />
-                <button type="submit" className="btn-secondary" style={{ padding: "0.2rem 0.6rem", fontSize: "0.75rem" }}>Complete</button>
+                <input type="hidden" name="status" value="Designing" />
+                <button type="submit" className="btn-secondary" style={{ padding: "0.2rem 0.6rem", fontSize: "0.75rem" }}>Start Design</button>
               </form>
             )}
-            {task.status === 'completed' && isAdmin && (
-              <form action={approveTask}>
+            {task.status === 'Designing' && (
+              <form action={updateTask}>
                 <input type="hidden" name="id" value={task.id} />
-                <button type="submit" className="btn-primary" style={{ padding: "0.2rem 0.6rem", fontSize: "0.75rem", backgroundColor: "#10b981" }}>Approve</button>
+                <input type="hidden" name="status" value="Waiting Approval" />
+                <button type="submit" className="btn-secondary" style={{ padding: "0.2rem 0.6rem", fontSize: "0.75rem" }}>Sent for Approval</button>
+              </form>
+            )}
+            {task.status === 'Waiting Approval' && (
+              <form action={updateTask}>
+                <input type="hidden" name="id" value={task.id} />
+                <input type="hidden" name="status" value="Ready to Post" />
+                <button type="submit" className="btn-secondary" style={{ padding: "0.2rem 0.6rem", fontSize: "0.75rem" }}>Approve</button>
+              </form>
+            )}
+            {task.status === 'Ready to Post' && isAdmin && (
+              <form action={updateTask}>
+                <input type="hidden" name="id" value={task.id} />
+                <input type="hidden" name="status" value="Posted" />
+                <button type="submit" className="btn-primary" style={{ padding: "0.2rem 0.6rem", fontSize: "0.75rem", backgroundColor: "#10b981" }}>Mark Posted</button>
               </form>
             )}
           </div>
@@ -76,26 +94,40 @@ export default function TaskBoardClient({ initialTasks, userRole, clients, emplo
 
   return (
     <>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "1.5rem" }}>
-        <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-          <h2 style={{ fontSize: "1.25rem", fontWeight: "600", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <Clock size={20} color="var(--accent-blue)" /> Task Ongoing
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "1rem", overflowX: "auto", paddingBottom: "1rem" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "1rem", minWidth: "250px" }}>
+          <h2 style={{ fontSize: "1.1rem", fontWeight: "600", display: "flex", alignItems: "center", gap: "0.5rem", color: "#f59e0b" }}>
+            <Clock size={18} /> Pending
           </h2>
-          {pendingTasks.map(t => <TaskCard key={t.id} task={t} borderColor="var(--accent-blue)" />)}
+          {pendingTasks.map(t => <TaskCard key={t.id} task={t} borderColor="#f59e0b" />)}
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-          <h2 style={{ fontSize: "1.25rem", fontWeight: "600", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <CheckCircle size={20} color="#fbbf24" /> Reviewing by Clients
+        <div style={{ display: "flex", flexDirection: "column", gap: "1rem", minWidth: "250px" }}>
+          <h2 style={{ fontSize: "1.1rem", fontWeight: "600", display: "flex", alignItems: "center", gap: "0.5rem", color: "#3b82f6" }}>
+            <Pencil size={18} /> Designing
           </h2>
-          {completedTasks.map(t => <TaskCard key={t.id} task={t} borderColor="#fbbf24" />)}
+          {designingTasks.map(t => <TaskCard key={t.id} task={t} borderColor="#3b82f6" />)}
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-          <h2 style={{ fontSize: "1.25rem", fontWeight: "600", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <ShieldCheck size={20} color="#10b981" /> Approved by Clients
+        <div style={{ display: "flex", flexDirection: "column", gap: "1rem", minWidth: "250px" }}>
+          <h2 style={{ fontSize: "1.1rem", fontWeight: "600", display: "flex", alignItems: "center", gap: "0.5rem", color: "#a855f7" }}>
+            <ShieldCheck size={18} /> Waiting Approval
           </h2>
-          {approvedTasks.map(t => <TaskCard key={t.id} task={t} borderColor="#10b981" />)}
+          {waitingTasks.map(t => <TaskCard key={t.id} task={t} borderColor="#a855f7" />)}
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: "1rem", minWidth: "250px" }}>
+          <h2 style={{ fontSize: "1.1rem", fontWeight: "600", display: "flex", alignItems: "center", gap: "0.5rem", color: "#10b981" }}>
+            <CheckCircle size={18} /> Ready to Post
+          </h2>
+          {readyTasks.map(t => <TaskCard key={t.id} task={t} borderColor="#10b981" />)}
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: "1rem", minWidth: "250px" }}>
+          <h2 style={{ fontSize: "1.1rem", fontWeight: "600", display: "flex", alignItems: "center", gap: "0.5rem", color: "#6366f1" }}>
+            <Camera size={18} /> Posted
+          </h2>
+          {postedTasks.map(t => <TaskCard key={t.id} task={t} borderColor="#6366f1" />)}
         </div>
       </div>
 
@@ -161,9 +193,11 @@ export default function TaskBoardClient({ initialTasks, userRole, clients, emplo
                 </div>
               </div>
               <select name="status" className="input-field" defaultValue={editingTask.status}>
-                <option value="pending">Ongoing</option>
-                <option value="completed">Reviewing</option>
-                <option value="approved">Approved</option>
+                <option value="Pending">Pending</option>
+                <option value="Designing">Designing</option>
+                <option value="Waiting Approval">Waiting Approval</option>
+                <option value="Ready to Post">Ready to Post</option>
+                <option value="Posted">Posted</option>
               </select>
               <button type="submit" className="btn-primary" style={{ marginTop: "1rem" }}>Save Changes</button>
             </form>

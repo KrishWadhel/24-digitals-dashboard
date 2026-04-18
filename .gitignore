@@ -44,3 +44,11 @@ next-env.d.ts
 
 .vercel
 .env*.local
+
+# Local binaries and DB
+node.exe
+dev.db*
+node-bin/
+git-bin/
+scratch/
+*.txt

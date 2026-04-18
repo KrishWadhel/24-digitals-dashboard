@@ -101,14 +101,34 @@ if (isServerless) {
       FOREIGN KEY (clientId) REFERENCES Client(id)
     );
 
-    CREATE TABLE IF NOT EXISTS InstagramAccount (
+    CREATE TABLE IF NOT EXISTS GeneratedReport (
       id TEXT PRIMARY KEY,
-      username TEXT UNIQUE,
-      token TEXT,
-      businessId TEXT,
-      snapshot TEXT,
-      isActive INTEGER DEFAULT 0,
-      createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
+      clientId TEXT,
+      period TEXT,
+      platforms TEXT,
+      overviewText TEXT,
+      reportData TEXT, -- JSON blob of the entire analyzed result
+      createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (clientId) REFERENCES Client(id)
+    );
+
+    CREATE TABLE IF NOT EXISTS ReportPost (
+      id TEXT PRIMARY KEY,
+      reportId TEXT,
+      permalink TEXT,
+      publishTime TEXT,
+      description TEXT,
+      mediaUrl TEXT, -- Locally cached image path
+      views INTEGER DEFAULT 0,
+      reach INTEGER DEFAULT 0,
+      likes INTEGER DEFAULT 0,
+      reposts INTEGER DEFAULT 0,
+      saves INTEGER DEFAULT 0,
+      shares INTEGER DEFAULT 0,
+      comments INTEGER DEFAULT 0,
+      interactions INTEGER DEFAULT 0,
+      createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (reportId) REFERENCES GeneratedReport(id)
     );
 
     CREATE TABLE IF NOT EXISTS Settings (

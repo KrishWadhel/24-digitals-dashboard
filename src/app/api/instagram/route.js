@@ -11,9 +11,9 @@ export async function GET() {
   if (activeAccount.snapshot) {
     try {
       const data = JSON.parse(activeAccount.snapshot);
-      // Ensure we return a consistent structure
       return new Response(JSON.stringify({
-        profile: data.profile,
+        profile: { username: activeAccount.username },
+        ...data,
         media: data.last_posts || data.media || []
       }), { status: 200 });
     } catch (e) { console.error("Snapshot parse error:", e); }

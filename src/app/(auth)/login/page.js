@@ -46,7 +46,7 @@ export default function LoginPage() {
               className="input-field" 
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="admin@24digitals.com"
+              placeholder=""
               required 
             />
           </div>
@@ -57,7 +57,7 @@ export default function LoginPage() {
               className="input-field" 
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="admin123"
+              placeholder=""
               required 
             />
           </div>
@@ -65,14 +65,6 @@ export default function LoginPage() {
             Sign In
           </button>
         </form>
-        <div style={{ marginTop: '1.5rem', textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
-          <p style={{ marginBottom: "0.5rem" }}>Demo Accounts (Password: admin123)</p>
-          <ul style={{ listStyleType: "none", padding: 0, margin: 0 }}>
-            <li>admin@24digitals.com (Admin)</li>
-            <li>yashvi@24digitals.com (Employee)</li>
-            <li>vigo@client.com (PW: client123)</li>
-          </ul>
-        </div>
       </div>
     </div>
   );
